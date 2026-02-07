@@ -1,8 +1,5 @@
 # Rumor Tracking System (MVC) — ข้อที่ 1
 
-> เวอร์ชันนี้แก้ปัญหา `ModuleNotFoundError: No module named 'rumor_tracker'` บน Windows แล้ว
-> โดย `scripts/*.py` จะปรับ `sys.path` ให้อัตโนมัติ
-
 ## โครงสร้าง MVC
 - Model: `rumor_tracker/models`
 - View: `rumor_tracker/templates`
