@@ -9,7 +9,7 @@
 ## วิธีรัน (Windows PowerShell)
 ```powershell
 python -m venv venv
-.env\Scripts\Activate.ps1
+.\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 
 python .\scripts\init_db.py
