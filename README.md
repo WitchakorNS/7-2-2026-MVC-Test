@@ -14,8 +14,7 @@ pip install -r requirements.txt
 
 python .\scripts\init_db.py
 python .\scripts\seed_data.py
-python .
-un.py
+python .\run.py
 ```
 
 เปิดเว็บ: http://127.0.0.1:5000
