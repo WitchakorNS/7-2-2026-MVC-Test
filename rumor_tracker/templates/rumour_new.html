@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}เพิ่มข่าวลือ{% endblock %}
+{% block content %}
+  <h1>เพิ่มข่าวลือ</h1>
+  <div class="card">
+    <form method="post" action="{{ url_for('rumours.rumour_create') }}">
+      <label>รหัสข่าวลือ (8 หลัก ตัวแรกไม่เป็น 0)</label>
+      <input name="rumour_id" placeholder="เช่น 12345678" minlength="8" maxlength="8" required>
+      <label>หัวข้อข่าว</label>
+      <input name="title" placeholder="พาดหัวข่าวลือ..." required>
+      <label>แหล่งที่มา</label>
+      <input name="source" placeholder="เช่น Facebook / Twitter / Line..." required>
+      <label>credibility score (0..1)</label>
+      <input name="credibility_score" type="number" min="0" max="1" step="0.01" value="0.50" required>
+      <button type="submit">บันทึก</button>
+    </form>
+  </div>
+{% endblock %}

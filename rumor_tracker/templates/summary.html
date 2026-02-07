@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}สรุปผล{% endblock %}
+{% block content %}
+  <h1>หน้าสรุปผล</h1>
+
+  <div class="grid2 gap">
+    <div class="card">
+      <h2>ข่าวลือที่เข้าสู่สถานะ panic</h2>
+      {% if panic_rumours|length == 0 %}
+        <p class="muted">ไม่มี</p>
+      {% else %}
+        <ul class="list">
+          {% for r in panic_rumours %}
+            <li><span class="pill pill-danger">panic</span> <a href="{{ url_for('rumours.rumour_detail', rumour_id=r.id) }}">{{ r.title }}</a>
+              <span class="muted"> • reports: {{ counts.get(r.id, 0) }}</span></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2>ข่าวลือที่ถูกยืนยันผล (verified)</h2>
+
+      <h3>ยืนยันว่า “ข้อมูลจริง”</h3>
+      {% if verified_true|length == 0 %}
+        <p class="muted">ไม่มี</p>
+      {% else %}
+        <ul class="list">
+          {% for r in verified_true %}
+            <li><span class="pill pill-info">true</span> <a href="{{ url_for('rumours.rumour_detail', rumour_id=r.id) }}">{{ r.title }}</a>
+              <span class="muted"> • reports: {{ counts.get(r.id, 0) }}</span></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <h3>ยืนยันว่า “ข้อมูลเท็จ”</h3>
+      {% if verified_false|length == 0 %}
+        <p class="muted">ไม่มี</p>
+      {% else %}
+        <ul class="list">
+          {% for r in verified_false %}
+            <li><span class="pill pill-info">false</span> <a href="{{ url_for('rumours.rumour_detail', rumour_id=r.id) }}">{{ r.title }}</a>
+              <span class="muted"> • reports: {{ counts.get(r.id, 0) }}</span></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

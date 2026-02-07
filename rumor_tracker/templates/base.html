@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Rumor Tracking{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="brand"><a href="{{ url_for('rumours.rumours_list') }}">Rumor Tracking System</a></div>
+      <nav class="nav">
+        <a href="{{ url_for('rumours.rumours_list') }}">รวมข่าวลือ</a>
+        <a href="{{ url_for('rumours.rumour_new_form') }}">เพิ่มข่าวลือ</a>
+        <a href="{{ url_for('summary.summary') }}">สรุปผล</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-wrap">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer"><div class="container"><small>Demo MVC • Flask + SQLite</small></div></footer>
+</body>
+</html>

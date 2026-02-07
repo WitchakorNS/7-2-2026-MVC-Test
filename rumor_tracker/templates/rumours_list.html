@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}รวมข่าวลือ{% endblock %}
+{% block content %}
+  <h1>หน้ารวมข่าวลือ</h1>
+  <p class="muted">เรียงตามจำนวนรายงาน (มาก → น้อย)</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>รหัส</th><th>หัวข้อ</th><th>แหล่งที่มา</th><th>วันที่สร้าง</th><th>credibility</th><th>รายงาน</th><th>สถานะ</th><th>ตรวจสอบแล้ว?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rumour, report_count in rows %}
+        <tr>
+          <td class="mono">{{ rumour.id }}</td>
+          <td><a href="{{ url_for('rumours.rumour_detail', rumour_id=rumour.id) }}">{{ rumour.title }}</a></td>
+          <td>{{ rumour.source }}</td>
+          <td>{{ rumour.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+          <td>{{ "%.2f"|format(rumour.credibility_score) }}</td>
+          <td>{{ report_count }}</td>
+          <td>{% if rumour.status == "panic" %}<span class="pill pill-danger">panic</span>{% else %}<span class="pill pill-ok">normal</span>{% endif %}</td>
+          <td>{% if rumour.is_verified %}<span class="pill pill-info">verified: {{ rumour.verified_as }}</span>{% else %}<span class="pill">no</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

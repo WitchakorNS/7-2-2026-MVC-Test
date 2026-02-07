@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}รายละเอียดข่าวลือ{% endblock %}
+{% block content %}
+  <h1>หน้ารายละเอียดข่าวลือ</h1>
+
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="label">รหัสข่าวลือ</div>
+        <div class="mono big">{{ rumour.id }}</div>
+      </div>
+      <div>
+        <div class="label">สถานะ</div>
+        <div>
+          {% if rumour.status == "panic" %}
+            <span class="pill pill-danger">panic</span>
+          {% else %}
+            <span class="pill pill-ok">normal</span>
+          {% endif %}
+          <span class="muted">• panic เมื่อรายงาน > {{ panic_threshold }}</span>
+        </div>
+      </div>
+    </div>
+
+    <h2>{{ rumour.title }}</h2>
+    <p><span class="label">แหล่งที่มา:</span> {{ rumour.source }}</p>
+    <p><span class="label">วันที่สร้าง:</span> {{ rumour.created_at.strftime("%Y-%m-%d %H:%M") }}</p>
+    <p><span class="label">credibility score:</span> {{ "%.2f"|format(rumour.credibility_score) }}</p>
+    <p><span class="label">จำนวนรายงาน:</span> <strong>{{ report_count }}</strong></p>
+
+    <hr>
+    <h3>สถานะการตรวจสอบ</h3>
+    {% if rumour.is_verified %}
+      <p><span class="pill pill-info">verified: {{ rumour.verified_as }}</span> <span class="muted">(ตรวจแล้ว รายงานเพิ่มไม่ได้)</span></p>
+    {% else %}
+      <p class="muted">ยังไม่ถูกตรวจสอบ</p>
+    {% endif %}
+  </div>
+
+  <div class="grid2 gap">
+    <div class="card">
+      <h3>ฟอร์มรายงานข่าวลือ</h3>
+      {% if rumour.is_verified %}
+        <p class="muted">ปิดการรายงาน: ข่าวลือนี้ถูกตรวจสอบแล้ว</p>
+      {% else %}
+        <form method="post" action="{{ url_for('reports.report_rumour', rumour_id=rumour.id) }}">
+          <label>ผู้รายงาน (role=general)</label>
+          <select name="reporter_id" required>
+            {% for u in users_general %}
+              <option value="{{ u.id }}">{{ u.id }} — {{ u.name }}</option>
+            {% endfor %}
+          </select>
+
+          <label>ประเภทรายงาน</label>
+          <select name="report_type" required>
+            <option value="distortion">บิดเบือน (distortion)</option>
+            <option value="incitement">ปลุกปั่น (incitement)</option>
+            <option value="fake">ข้อมูลเท็จ (fake)</option>
+          </select>
+
+          <button type="submit">ส่งรายงาน</button>
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3>ฟอร์มตรวจสอบข่าวลือ (role=checker)</h3>
+      {% if rumour.is_verified %}
+        <p class="muted">ตรวจสอบไปแล้ว ไม่สามารถตรวจซ้ำได้</p>
+      {% else %}
+        <form method="post" action="{{ url_for('reports.verify_rumour_action', rumour_id=rumour.id) }}">
+          <label>ผู้ตรวจสอบ</label>
+          <select name="checker_id" required>
+            {% for u in users_checker %}
+              <option value="{{ u.id }}">{{ u.id }} — {{ u.name }}</option>
+            {% endfor %}
+          </select>
+
+          <label>ผลการตรวจสอบ</label>
+          <select name="verified_as" required>
+            <option value="true">ข้อมูลจริง (true)</option>
+            <option value="false">ข้อมูลเท็จ (false)</option>
+          </select>
+
+          <button type="submit">ยืนยันผล</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>รายการรายงานล่าสุด</h3>
+    {% if reports|length == 0 %}
+      <p class="muted">ยังไม่มีรายงาน</p>
+    {% else %}
+      <table class="table">
+        <thead><tr><th>เวลา</th><th>ผู้รายงาน</th><th>ประเภท</th></tr></thead>
+        <tbody>
+          {% for rep, usr in reports %}
+            <tr>
+              <td>{{ rep.reported_at.strftime("%Y-%m-%d %H:%M") }}</td>
+              <td>{{ usr.id }} — {{ usr.name }}</td>
+              <td>{{ rep.report_type }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endblock %}
