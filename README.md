@@ -1,4 +1,4 @@
-# Rumor Tracking System (MVC) — Flask + SQLite
+# Rumor Tracking System (MVC) — ข้อที่ 1
 
 > เวอร์ชันนี้แก้ปัญหา `ModuleNotFoundError: No module named 'rumor_tracker'` บน Windows แล้ว
 > โดย `scripts/*.py` จะปรับ `sys.path` ให้อัตโนมัติ
@@ -17,7 +17,8 @@ pip install -r requirements.txt
 
 python .\scripts\init_db.py
 python .\scripts\seed_data.py
-python .un.py
+python .
+un.py
 ```
 
 เปิดเว็บ: http://127.0.0.1:5000
